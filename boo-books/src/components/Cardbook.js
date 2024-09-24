@@ -9,7 +9,7 @@ const App = () => {
     // Llamada a la API para obtener los libros
     const obtenerLibros = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/libros');
+        const response = await axios.get('http://localhost:3000/api/librosdb/libros');
         setLibros(response.data);
       } catch (error) {
         console.error("Error al obtener los libros:", error);

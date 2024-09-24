@@ -1,46 +1,45 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Books from "./searchbook";
 
-const Library = ()=>{
-    const [books, setBooks] = useState([]);
-    const [searcTerm, setSearchTerm] = useState("");
+const Library = () => {
+  const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(()=>{
-        axios.get("api/libros")
-        .then(response => setBooks(response.data))
-        .catch(error => console.error);
-    }, []);
+  // Función para obtener libros según el término de búsqueda
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(`/api/librosdb/libros?search=${searchTerm}`);
+      setBooks(response.data);
+    } catch (error) {
+      console.error('Error al buscar libros:', error);
+    }
+  };
 
-    return(
-        <div>
-            <input
-                type="text"
-                placeholder="Buscar libro..."
-                value={searcTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-            />
-            <div style={{display: "flex", flexDirection: "row"}}>
-                <div style={{flex: 1}}>
-                    {books.filter(book => book.nombre.toLowerCase().includes(searcTerm.toLowerCase())).map((book) => (
-                        <div key={book._id}>
-                            <img src={book.imagen} alt={book.nombre} style={{width: "100px"}}/>
-                        </div>
-                    ))}
-                </div>
-                <div style={{flex: 1}}>
-                    {books.filter(book => book.nombre.toLowerCase().includes(searcTerm.toLowerCase())).map((book) =>(
-                        <div key={book._id}>
-                            <h3>{book.nombre}</h3>
-                            <p>Autor: {book.autor}</p>
-                            <p>Año de publicación: {book.publicacion}</p>
-                            <p>ISBN: {book.isbn}</p>
-                            <p>Estado: {book.cantidadDisponible > 0 ? "Disponible" : "No disponible"}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
+  // Ejecutar la búsqueda cuando se hace clic en el botón
+  const handleSearchClick = () => {
+    fetchBooks();
+  };
+
+  // Obtener todos los libros cuando el componente se monta por primera vez
+  useEffect(() => {
+    fetchBooks(); // Cargar todos los libros al inicio
+  }, []);
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Buscar libro..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)} // Actualizar el searchTerm
+      />
+      <button onClick={handleSearchClick}>Buscar</button> {/* Botón para buscar */}
+      
+      {/* Pasar libros y searchTerm como props al componente Books */}
+      <Books books={books} searchTerm={searchTerm} />
+    </div>
+  );
 };
 
 export default Library;
