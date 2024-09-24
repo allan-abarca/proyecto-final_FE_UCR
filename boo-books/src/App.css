@@ -45,3 +45,45 @@
     transform: rotate(360deg);
   }
 }
+
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.libros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.libro-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.libro-imagen {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+h2 {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+p {
+  margin: 5px 0;
+}
+
+strong {
+  font-weight: bold;
+}
