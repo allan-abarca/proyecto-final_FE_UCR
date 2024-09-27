@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const libroRoutes = require('./routes/libroRoutes'); // Asegúrate de que esta línea esté presente
+const libroRoutes = require('./Routes/libroRoutes'); // Asegúrate de que esta línea esté presente
 
 const app = express();
 
