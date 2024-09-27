@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Libro = require("../models/Libro");
+const Libro = require("../Models/libros");
 
 // Crear un libro
 router.post("/", async (req, res) => {
@@ -22,13 +22,14 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Obtener todos los libros
-router.get("/", async (req, res) => {
+// Obtener todos los libros o buscar libros por término
+router.get('/', async (req, res) => {
+  const searchTerm = req.query.search || '';
   try {
-    const libros = await Libro.find();
-    res.json(libros);
+      const libros = await Libro.find({ nombre: { $regex: searchTerm, $options: 'i' } });
+      res.json(libros);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
   }
 });
 

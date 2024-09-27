@@ -9,12 +9,13 @@ const Library = () => {
   // Función para obtener libros según el término de búsqueda
   const fetchBooks = async () => {
     try {
-      const response = await axios.get(`/api/librosdb/libros?search=${searchTerm}`);
-      setBooks(response.data);
+        const response = await axios.get(`/api/libros?search=${searchTerm}`);
+        setBooks(response.data);
     } catch (error) {
-      console.error('Error al buscar libros:', error);
+        console.error('Error al buscar libros:', error);
     }
-  };
+};
+
 
   // Ejecutar la búsqueda cuando se hace clic en el botón
   const handleSearchClick = () => {
