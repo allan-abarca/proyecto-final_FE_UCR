@@ -1,69 +1,59 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react"; 
+import axios from "axios"; // Importamos axios para hacer solicitudes HTTP.
+import './Library.css'; 
 
-// Este componente se llama "Library" y muestra una lista de libros y sus detalles.
-const Library = () => {
-    // `books` es donde guardamos la lista de libros que obtenemos de la API.
-    // `searchTerm` es lo que el usuario escribe para buscar un libro.
-    const [books, setBooks] = useState([]);
-    const [searchTerm, setSearchTerm] = useState(""); 
+const Library = () => { 
+    // Estados: uno para almacenar los libros y otro para el término de búsqueda.
+    const [books, setBooks] = useState([]); 
+    const [searchTerm, setSearchTerm] = useState("");
 
-    // Este efecto se ejecuta al cargar la página.
-    // Llamamos a la API para obtener los libros y luego los guardamos en `books`.
+    // Al cargar el componente, obtenemos los libros desde la API.
     useEffect(() => {
-        axios.get("api/libros") 
-            .then(response => setBooks(response.data)) 
-            .catch(error => console.error); 
+        axios.get("api/libros")
+        .then(response => setBooks(response.data)) // Guardamos los libros obtenidos en el estado.
+        .catch(error => console.error(error)); // Mostramos errores en la consola si algo falla.
     }, []); 
 
     return (
-        <div>
-            {/* Caja de texto donde el usuario puede escribir para buscar libros */}
-            <input
-                type="text"
-                placeholder="Buscar libro..." 
-                value={searcTerm}
-                onChange={e => setSearchTerm(e.target.value)} 
-            />
+        <div className="library-container">
+            {/* Encabezado de la biblioteca */}
+            <div className="library-header">
+                <h2>Biblioteca</h2>
+            </div>
 
-            {/* Aquí mostramos los libros en dos columnas: imágenes y detalles */}
-            <div style={{ display: "flex", flexDirection: "row" }}>
-                
-                {/* Primera columna: las imágenes de los libros */}
-                <div style={{ flex: 1 }}>
-                    {/* Filtramos los libros para mostrar solo los que coinciden con la búsqueda */}
-                    {books
-                        .filter(book => book.nombre.toLowerCase().includes(searcTerm.toLowerCase())) 
-                        .map((book) => (
-                           
-                            <div key={book._id}>
-                                <img src={book.imagen} alt={book.nombre} style={{ width: "100px" }} />
-                            </div>
-                        ))
-                    }
-                </div>
+            {/* Campo de búsqueda que filtra libros según el nombre ingresado */}
+            <div className="library-search">
+                <input
+                    type="text"
+                    placeholder="Buscar libro..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)} // Actualizamos el estado con el valor de búsqueda ingresado.
+                />
+            </div>
 
-                {/* Segunda columna: los detalles de los libros */}
-                <div style={{ flex: 1 }}>
-                    {/* Repetimos el filtrado para mostrar los detalles solo de los libros filtrados */}
-                    {books
-                        .filter(book => book.nombre.toLowerCase().includes(searcTerm.toLowerCase())) 
-                        .map((book) => (
-                            // Mostramos los detalles de cada libro.
-                            <div key={book._id}>
+            {/* Contenedor que muestra los libros en dos columnas */}
+            <div className="library-content">
+                {books
+                    .filter(book => book.nombre.toLowerCase().includes(searchTerm.toLowerCase())) // Filtramos los libros según el término de búsqueda.
+                    .map((book) => (
+                        <div className="book-item" key={book._id}> 
+                            {/* Columna para las imágenes de los libros */}
+                            <img src={book.imagen} alt={book.nombre} /> 
+
+                            {/* Columna para los detalles del libro */}
+                            <div className="book-details">
                                 <h3>{book.nombre}</h3>
-                                <p>Autor: {book.autor}</p>
-                                <p>Año de publicación: {book.publicacion}</p>
-                                <p>ISBN: {book.isbn}</p>
-                                {/* Si la cantidad de libros disponibles es mayor a 0, decimos que está disponible. */}
-                                <p>Estado: {book.cantidadDisponible > 0 ? "Disponible" : "No disponible"}</p>
+                                <p><span>Autor:</span> {book.autor}</p>
+                                <p><span>Año de publicación:</span> {book.publicacion}</p>
+                                <p><span>ISBN:</span> {book.isbn}</p>
+                                <p><span>Estado:</span> {book.cantidadDisponible > 0 ? "Disponible" : "No disponible"}</p> 
                             </div>
-                        ))
-                    }
-                </div>
+                        </div>
+                    ))}
             </div>
         </div>
     );
 };
 
 export default Library;
+

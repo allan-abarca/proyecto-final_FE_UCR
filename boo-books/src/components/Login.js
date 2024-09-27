@@ -84,38 +84,30 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import './Login.css'; // Asegúrate de que el CSS está enlazado
+import loginImage from '../images/boo-books.jpg'; 
 
-// Aquí definimos las reglas de validación para el formulario usando `Yup`.
-// Validamos que el email tenga formato correcto y que la contraseña tenga al menos 6 caracteres.
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Email inválido").required("Email requerido"),
     password: Yup.string().min(6, "La contraseña debe tener al menos 6 caracteres").required("Contraseña requerida"),
 });
 
-// El componente `Login` gestiona el formulario de inicio de sesión.
 const Login = () => {
-    
     const [isAdmin, setIsAdmin] = useState(false);
-   
     const navigate = useNavigate();
 
-    // Esta función maneja lo que pasa cuando el formulario se envía.
-    // Aquí estamos verificando las credenciales según si el usuario es admin o no.
     const handleLogin = (values) => {
         const { email, password } = values;
-        
-        // Si el checkbox de admin está activado, verificamos las credenciales de admin.
+
         if (isAdmin) {
-            // Credenciales fijas para el admin.
             if (email === "admin@admin.com" && password === "Admin1234") {
-                navigate("/admin"); // Redirigimos a la página del admin.
+                navigate("/admin");
             } else {
                 alert("Credenciales incorrectas para admin");
             }
         } else {
-            // Si no es admin, verificamos las credenciales de usuario.
             if (email === "user@user.com" && password === "User1234") {
-                navigate("/user"); // Redirigimos a la página del usuario.
+                navigate("/user");
             } else {
                 alert("Credenciales incorrectas para usuario");
             }
@@ -123,52 +115,43 @@ const Login = () => {
     };
 
     return (
-        <div>
-            {/* Título del formulario */}
-            <h1>Login</h1>
-
-            {/* Usamos Formik para manejar el formulario */}
-            <Formik
-                initialValues={{ email: "", password: "" }} // Valores iniciales del formulario.
-                validationSchema={validationSchema} // Validación del formulario.
-                onSubmit={handleLogin}
-            >
-                {/* El componente Form de Formik maneja el envío automático del formulario */}
-                <Form>
-                    {/* Campo del email */}
-                    <div>
-                        <label>Email:</label>
-                        <Field type="email" name="email" /> {/* Campo para ingresar el email */}
-                        <ErrorMessage name="email" component="div" /> {/* Muestra los errores de validación del email */}
-                    </div>
-
-                    {/* Campo de la contraseña */}
-                    <div>
-                        <label>Contraseña:</label>
-                        <Field type="password" name="password" /> {/* Campo para ingresar la contraseña */}
-                        <ErrorMessage name="password" component="div" /> {/* Muestra los errores de validación de la contraseña */}
-                    </div>
-
-                    {/* Checkbox para elegir si se ingresa como administrador */}
-                    <div>
-                        <label>
-                            {/* Si el checkbox se marca o desmarca, se actualiza `isAdmin` */}
-                            <Field
-                                type="checkbox"
-                                name="isAdmin"
-                                checked={isAdmin}
-                                onChange={() => setIsAdmin(!isAdmin)}
-                            />
-                            Entrar como Admin
-                        </label>
-                    </div>
-
-                    {/* Botón para enviar el formulario */}
-                    <button type="submit">Login</button>
-                </Form>
-            </Formik>
+        <div className="login-container">
+            <div className="image-container">
+                <img src={loginImage} alt="Descripción de la imagen" className="login-image" />
+            </div>
+            <div className="login-box">
+                <h1>Login</h1>
+                <Formik
+                    initialValues={{ email: "", password: "" }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleLogin}
+                >
+                    <Form>
+                        <div>
+                            <label>Email:</label>
+                            <Field type="email" name="email" />
+                            <ErrorMessage name="email" component="div" className="error-message" />
+                        </div>
+                        <div>
+                            <label>Contraseña:</label>
+                            <Field type="password" name="password" />
+                            <ErrorMessage name="password" component="div" className="error-message" />
+                        </div>
+                        <div>
+                            <label>
+                                <Field type="checkbox" name="isAdmin" checked={isAdmin} onChange={() => setIsAdmin(!isAdmin)} />
+                                Entrar como Admin
+                            </label>
+                        </div>
+                        <button type="submit">Login</button>
+                    </Form>
+                </Formik>
+            </div>
         </div>
     );
 };
 
 export default Login;
+
+
+

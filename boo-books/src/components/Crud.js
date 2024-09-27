@@ -1,30 +1,32 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './Crud.css'; 
 
-const Crud = ()=>{
+const Crud = () => {
     const [users, setUsers] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         axios.get("/api/users")
-        .then(response => setUsers(response.data))
-        .catch(error => console.error(error));
+            .then(response => setUsers(response.data))
+            .catch(error => console.error(error));
     }, []);
 
-    const handleDelete = (userId)=>{
+    const handleDelete = (userId) => {
         axios.delete(`/api/users/${userId}`)
-        .then(()=>{
-            setUsers(users.filter(user => user._id !== userId));
-        })
-        .catch(error => console.error(error));
+            .then(() => {
+                setUsers(users.filter(user => user._id !== userId));
+            })
+            .catch(error => console.error(error));
     };
 
-    return(
-        <div>
+    return (
+        <div className="crud-container">
             <h3>CRUD de usuarios</h3>
             <ul>
                 {users.map(user => (
                     <li key={user._id}>
-                        {user.nombre} <button onClick={() => handleDelete(user._id)}>Eliminar</button>
+                        {user.nombre} 
+                        <button onClick={() => handleDelete(user._id)}>Eliminar</button>
                     </li>
                 ))}
             </ul>
