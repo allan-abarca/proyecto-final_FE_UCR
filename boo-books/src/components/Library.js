@@ -9,7 +9,7 @@ const Library = () => {
   // Función para obtener libros según el término de búsqueda
   const fetchBooks = async () => {
     try {
-        const response = await axios.get(`/api/libros?search=${searchTerm}`);
+      const response = await axios.get('/api/libros', { params: { search: searchTerm } });
         setBooks(response.data);
     } catch (error) {
         console.error('Error al buscar libros:', error);
