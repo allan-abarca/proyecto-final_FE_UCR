@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors'); 
 const app = express();
 const PORT = 5000;
+const libroRoutes = require('./Routes/librosRoutes');
 
 // Configurar CORS 
 app.use(cors({
@@ -81,6 +82,7 @@ app.delete('/api/users/:id', async (req, res) => {
   
   res.status(200).send('Usuario eliminado');
 });
+app.use('/api/libros', libroRoutes); 
 
 // Inicializar servidor
 app.listen(PORT, () => {
