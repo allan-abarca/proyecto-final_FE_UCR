@@ -1,42 +1,23 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import AdminLibros from "../components/adminLibros";
+import AdminUsers from "../components/adminUsers";    
+import Navbar from "../components/Navbar";
+import { Outlet } from "react-router-dom";
 
-const AdminUsers = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    axios.get('/api/users')
-      .then(response => setUsers(response.data))
-      .catch(error => console.error(error));
-  }, []);
-
-  const deleteUser = (id) => {
-    axios.delete(`/api/users/${id}`)
-      .then(() => setUsers(users.filter(user => user._id !== id)))
-      .catch(error => console.error(error));
-  };
-
-  const updateUser = (id, updatedUser) => {
-    axios.put(`/api/users/${id}`, updatedUser)
-      .then(response => setUsers(users.map(user => (user._id === id ? response.data : user))))
-      .catch(error => console.error(error));
-  };
-
+const AdminDashboard = () => {
   return (
     <div>
-      <h1>Gestión de Usuarios</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user._id}>
-            {user.email} ({user.role})
-            <button onClick={() => deleteUser(user._id)}>Eliminar</button>
-            <button onClick={() => updateUser(user._id, { email: user.email, role: user.role })}>Editar</button>
-          </li>
-        ))}
-      </ul>
+      <Navbar isAdmin={true} />  {/* Menú de navegación con rol de administrador */}
+      <div>
+        <h1>Panel de Administración</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <AdminLibros />   {/* Mostrar el CRUD de libros */}
+          <AdminUsers />    {/* Mostrar el CRUD de usuarios */}
+        </div>
+      </div>
+      <Outlet />  {/* Rutas adicionales si las necesitas */}
     </div>
   );
 };
 
-export default AdminUsers;
-
+export default AdminDashboard;
