@@ -1,0 +1,45 @@
+/* Estilos para la pantalla de Perfil */
+.profile-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #F9F6FA; /* Color secundario */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+.profile-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Hace la imagen redonda */
+    object-fit: cover; /* Para asegurar que la imagen mantenga proporción */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+.profile-info {
+    flex: 2;
+    padding-left: 20px; /* Espacio a la izquierda del texto */
+}
+
+.profile-info h3 {
+    color: #592515; /* Color principal */
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #305252; /* Cuarto color */
+}
+
+.profile-info p span {
+    font-weight: bold; /* Resaltar los valores */
+}
+
+

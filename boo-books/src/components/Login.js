@@ -1,11 +1,12 @@
+
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
+
   email: Yup.string().email("Email inválido").required("Email requerido"),
   password: Yup.string().min(6, "La contraseña debe tener al menos 6 caracteres").required("Contraseña requerida"),
 });

@@ -1,0 +1,55 @@
+/* Estilos para la pantalla de Accesibilidad */
+.accessibility-container {
+    padding: 20px;
+    background-color: #F9F6FA; /* Color secundario */
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accessibility-header {
+    background-color: #592515; /* Color principal */
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.accessibility-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.accessibility-options label {
+    font-size: 1.1em;
+    color: #305252; /* Cuarto color */
+}
+
+.accessibility-options input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.accessibility-options div {
+    display: flex;
+    align-items: center;
+}
+
+.accessibility-options button {
+    background-color: #77878B; /* Color terciario */
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.accessibility-options button:hover {
+    background-color: #488286; /* Quinto color */
+}
+
+
