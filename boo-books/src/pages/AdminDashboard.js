@@ -1,4 +1,3 @@
-// /client/src/pages/AdminUsers.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -13,9 +12,13 @@ const AdminUsers = () => {
 
   const deleteUser = (id) => {
     axios.delete(`/api/users/${id}`)
-      .then(() => {
-        setUsers(users.filter(user => user._id !== id));
-      })
+      .then(() => setUsers(users.filter(user => user._id !== id)))
+      .catch(error => console.error(error));
+  };
+
+  const updateUser = (id, updatedUser) => {
+    axios.put(`/api/users/${id}`, updatedUser)
+      .then(response => setUsers(users.map(user => (user._id === id ? response.data : user))))
       .catch(error => console.error(error));
   };
 
@@ -27,6 +30,7 @@ const AdminUsers = () => {
           <li key={user._id}>
             {user.email} ({user.role})
             <button onClick={() => deleteUser(user._id)}>Eliminar</button>
+            <button onClick={() => updateUser(user._id, { email: user.email, role: user.role })}>Editar</button>
           </li>
         ))}
       </ul>
@@ -35,3 +39,4 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
+

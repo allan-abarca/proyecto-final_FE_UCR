@@ -1,33 +1,88 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const libroRoutes = require('./Routes/libroRoutes'); 
-const userRoutes = require('./Routes/userRoutes');
-const loginRouter = require('./Routes/login'); // adjust the path accordingly
-
-
+const cors = require('cors'); 
 const app = express();
+const PORT = 5000;
+
+// Configurar CORS 
+app.use(cors({
+    origin: 'http://localhost:3000' }));
+// Conexión MongoDB Atlas
+mongoose.connect('mongodb+srv://djvm1591:GaW7jHT35hjoXfNl@cluster0.rmq6q.mongodb.net/simpleLogin?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => console.log('Conectado a la base de datos'))
+  .catch((err) => console.log(err));
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Conexión con MongoDB (local en este caso)
-mongoose.connect('mongodb://localhost:27017/librosdb', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log('Conectado a MongoDB'))
-.catch(err => console.log(err));
-
-// Rutas para libros y usuarios
-app.use('/api/libros', libroRoutes);
-app.use('/api/users', userRoutes);
-
-// Puerto del servidor
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+// Modelo Usuario
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ['normal', 'admin'], default: 'normal' },
 });
 
+const User = mongoose.model('User', userSchema);
+
+// Ruta para registrar usuarios (solo admin)
+app.post('/api/register', async (req, res) => {
+  const { email, password, role } = req.body;
+
+  // Validación si el usuario ya existe
+  const existUser = await User.findOne({ email });
+  if (existUser) return res.status(400).send('El usuario ya existe');
+
+  // Crear un nuevo usuario
+  const newUser = new User({ email, password, role });
+  await newUser.save();
+
+  res.status(201).json(newUser);
+});
+
+// Ruta de inicio de sesión
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user || user.password !== password) {
+    return res.status(400).send('Credenciales incorrectas');
+  }
+
+  // Retorna rol del usuario para gestionar el acceso
+  res.status(200).json({ role: user.role });
+});
+
+// Listar usuarios (solo admin)
+app.get('/api/users', async (req, res) => {
+  const users = await User.find();
+  res.status(200).json(users);
+});
+
+// Editar usuario (solo admin)
+app.put('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { email, password, role } = req.body;
+  const updatedUser = await User.findByIdAndUpdate(id, { email, password, role }, { new: true });
+  
+  if (!updatedUser) return res.status(404).send('Usuario no encontrado');
+  
+  res.status(200).json(updatedUser);
+});
+
+// Eliminar usuario (solo admin)
+app.delete('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const deletedUser = await User.findByIdAndDelete(id);
+  
+  if (!deletedUser) return res.status(404).send('Usuario no encontrado');
+  
+  res.status(200).send('Usuario eliminado');
+});
+
+// Inicializar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado en el puerto ${PORT}`);
+});

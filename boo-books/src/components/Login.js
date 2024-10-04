@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Email inválido").required("Email requerido"),
   password: Yup.string().min(6, "La contraseña debe tener al menos 6 caracteres").required("Contraseña requerida"),
@@ -12,18 +13,19 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const navigate = useNavigate();
 
+  // aqui se manejara el login
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post("/api/login", values);
+      const response = await axios.post("http://localhost:5000/api/login", values);
       const { role } = response.data;
-      
-      // Redirigir según el rol
+
       if (role === "admin") {
         navigate("/admin");
       } else {
         navigate("/user");
       }
     } catch (error) {
+      console.error("Error en el login:", error.response ? error.response.data : error.message);
       alert("Credenciales incorrectas");
     }
   };
@@ -34,7 +36,7 @@ const Login = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={handleLogin}
+        onSubmit={handleLogin}  
       >
         <Form>
           <div>
@@ -55,7 +57,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-
-//Se eliminó la necesidad del checkbox para admin, ya que la autenticación ahora es validada por el backend según el rol almacenado en la base de datos.
