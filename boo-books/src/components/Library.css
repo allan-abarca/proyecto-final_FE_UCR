@@ -1,0 +1,68 @@
+/* Estilos para la pantalla de Biblioteca */
+.library-container {
+    padding: 20px;
+    background-color: #F9F6FA; /* Color secundario */
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #592515; /* Color principal */
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.library-search {
+    margin-bottom: 20px;
+}
+
+.library-search input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.library-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dividimos el contenido en dos columnas */
+    gap: 20px;
+}
+
+.book-item {
+    display: flex;
+    gap: 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-item img {
+    width: 100px;
+    border-radius: 5px;
+}
+
+.book-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-details h3 {
+    color: #592515; /* Color principal */
+}
+
+.book-details p {
+    margin: 5px 0;
+    color: #305252; /* Cuarto color */
+}
+
+.book-details p span {
+    font-weight: bold;
+}
+
