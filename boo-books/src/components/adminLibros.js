@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+ 
 
 const AdminLibros = () => {
   const [libros, setLibros] = useState([]);
@@ -102,7 +103,7 @@ const AdminLibros = () => {
         {libros.map((libro) => (
           <li key={libro._id}>
             {editingLibro === libro._id ? (
-              <div>
+              <div >
                 <input
                   type="text"
                   name="nombre"
@@ -125,10 +126,12 @@ const AdminLibros = () => {
                 <button onClick={() => setEditingLibro(null)}>Cancelar</button>
               </div>
             ) : (
-              <div>
+              <div className="bookList">
                 {libro.nombre} - {libro.autor} ({libro.genero})
+                <div className="buttons">
                 <button onClick={() => deleteLibro(libro._id)}>Eliminar</button>
                 <button onClick={() => startEdit(libro)}>Editar</button>
+                </div>
               </div>
             )}
           </li>
