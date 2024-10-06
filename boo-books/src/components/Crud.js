@@ -9,10 +9,10 @@ const Crud = () => {
     return (
         <div className="crud-container">
             
-            <div classname="AdminBooks" style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div classname="AdminBooks">
             <AdminLibros/>
             </div>
-            <div classname="AdminUsers" style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div classname="AdminUsers">
             <AdminUsers/>
             </div>
             

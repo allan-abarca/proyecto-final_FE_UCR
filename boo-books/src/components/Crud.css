@@ -10,6 +10,11 @@
     gap: 20px;
     
 }
+.AdminBooks ,.AdminUsers{
+    display: flex;
+    justify-content: space-around;
+
+}
 .buttons {   
     display: flex;
     gap: 12px;
