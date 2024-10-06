@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
-import './Navbar.css'; // Asegúrate de que el CSS está enlazado
+import './Navbar.css'; 
 
 const Navbar = ({ isAdmin }) => {
     return (

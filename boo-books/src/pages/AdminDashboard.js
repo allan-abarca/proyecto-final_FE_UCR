@@ -2,7 +2,7 @@ import React from "react";
 import AdminLibros from "../components/adminLibros";
 import AdminUsers from "../components/adminUsers";    
 import Navbar from "../components/Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate} from "react-router-dom";
 
 const AdminDashboard = () => {
   return (
@@ -15,8 +15,10 @@ const AdminDashboard = () => {
           <AdminUsers />    {/* Mostrar el CRUD de usuarios */}
         </div>
       </div>
-      <Outlet />  {/* Rutas adicionales si las necesitas */}
+      
     </div>
+  
+
   );
 };
 
