@@ -11,11 +11,11 @@ const AdminDashboard = () => {
       <div>
         <h1>Panel de Administración</h1>
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <AdminLibros />   {/* Mostrar el CRUD de libros */}
-          <AdminUsers />    {/* Mostrar el CRUD de usuarios */}
+          {/* <AdminLibros />   
+          <AdminUsers />     */}
         </div>
       </div>
-      
+      <Outlet />  {/* Rutas adicionales si las necesitas */}
     </div>
   
 

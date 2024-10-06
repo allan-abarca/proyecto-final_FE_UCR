@@ -148,10 +148,14 @@ const AdminUsers = () => {
                 <button onClick={() => setEditingUser(null)}>Cancelar</button>
               </div>
             ) : (
-              <div>
+              <div className="bookList">
                 {user.nombre} - {user.email} ({user.role})
-                <button onClick={() => startEdit(user)}>Editar</button>
-                <button onClick={() => deleteUser(user._id)}>Eliminar</button>
+                  
+                  <div className="buttons">
+                    <button onClick={() => startEdit(user)}>Editar</button>
+                    <button onClick={() => deleteUser(user._id)}>Eliminar</button>
+                  </div>
+              
               </div>
             )}
           </li>

@@ -1,11 +1,28 @@
 /* Estilos para el CRUD de usuarios */
 .crud-container {
+    display: flex;
     padding: 20px;
     background-color: #F9F6FA; /* Color secundario */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
     margin: 20px auto; /* Centrar el contenedor */
+    width: 80%;
+    gap: 20px;
+    
+}
+.AdminBooks ,.AdminUsers{
+    display: flex;
+    justify-content: space-around;
+
+}
+.buttons {   
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+
+}
+.bookList {
+    width: 100%;
 }
 
 .crud-container h3 {
