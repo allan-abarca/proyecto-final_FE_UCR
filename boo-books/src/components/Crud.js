@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+
 import './Crud.css'; 
 import AdminLibros from "./adminLibros";
 import AdminUsers from "./adminUsers";
