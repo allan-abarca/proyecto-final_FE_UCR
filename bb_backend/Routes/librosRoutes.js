@@ -4,14 +4,6 @@ const Libro = require('../models/Libro');
 
 // Ruta para obtener todos los libros
 router.get('/', async (req, res) => {
-  try {
-    const libros = await Libro.find();
-    res.status(200).json(libros);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los libros', error });
-  }
-});
-router.get('/', async (req, res) => {
   const { nombre, autor, genero } = req.query;
 
   try {
@@ -35,6 +27,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los libros', error });
   }
 });
+
 // Ruta para crear un nuevo libro
 router.post('/', async (req, res) => {
   const { nombre, autor, isbn, imagen, publicacion, cantidadDisponible, genero } = req.body;
@@ -68,8 +61,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-//Ruta para editar libro 
-
 // Ruta para actualizar un libro por ID
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
@@ -87,7 +78,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// hacer ruta para tomar los libros 
+// Ruta para tomar un libro (disminuir cantidad disponible)
 router.post('/take/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -107,44 +98,18 @@ router.post('/take/:id', async (req, res) => {
   }
 });
 
-//agreagr ruta para definir como se toman los libros
-
-router.post('/take/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    
-    const libro = await Libro.findById(id);
-
-   
-    if (libro.cantidadDisponible > 0) {
-      
-      libro.cantidadDisponible -= 1;
-      await libro.save();  
-      res.status(200).json(libro);
-    } else {
-      res.status(400).json({ message: 'No hay más copias disponibles' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error al tomar el libro', error });
-  }
-});
+// Ruta para devolver un libro (aumentar cantidad disponible)
 router.post('/return/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    
     const libro = await Libro.findById(id);
 
-   
-    if (libro.cantidadDisponible >= 0) {
-      
-      libro.cantidadDisponible +=1;
-      await libro.save();  
-      res.status(200).json(libro);
-    } else {
-      res.status(400).json({ message: 'Error al devolver el libro' });
-    }
+    // Aumentar la cantidad disponible
+    libro.cantidadDisponible += 1;
+    await libro.save();
+    
+    res.status(200).json(libro);
   } catch (error) {
     res.status(500).json({ message: 'Error al devolver el libro', error });
   }
