@@ -4,14 +4,6 @@ const Libro = require('../models/Libro');
 
 // Ruta para obtener todos los libros
 router.get('/', async (req, res) => {
-  try {
-    const libros = await Libro.find();
-    res.status(200).json(libros);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los libros', error });
-  }
-});
-router.get('/', async (req, res) => {
   const { nombre, autor, genero } = req.query;
 
   try {
@@ -35,6 +27,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los libros', error });
   }
 });
+
 // Ruta para crear un nuevo libro
 router.post('/', async (req, res) => {
   const { nombre, autor, isbn, imagen, publicacion, cantidadDisponible, genero } = req.body;
@@ -68,8 +61,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-//Ruta para editar libro 
-
 // Ruta para actualizar un libro por ID
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
@@ -87,41 +78,38 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// hacer ruta para tomar los libros 
+// Ruta para tomar un libro (disminuir cantidad disponible)
 router.post('/take/:id', async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.body;  // El ID del usuario que toma el libro
 
   try {
     const libro = await Libro.findById(id);
+    const user = await User.findById(userId);
 
-    // Verificar disponibles
-    if (libro.cantidadDisponible > 0) {
-      libro.cantidadDisponible -= 1;  
-      await libro.save();
-      res.status(200).json(libro);
-    } else {
-      res.status(400).json({ message: 'No hay más copias disponibles' });
+    if (!libro || !user) {
+      return res.status(404).json({ message: 'Usuario o libro no encontrado' });
     }
-  } catch (error) {
-    res.status(500).json({ message: 'Error al tomar el libro', error });
-  }
-});
 
-//agreagr ruta para definir como se toman los libros
-
-router.post('/take/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    
-    const libro = await Libro.findById(id);
-
-   
+    // Verificar si hay libros disponibles
     if (libro.cantidadDisponible > 0) {
-      
+      // Verificar si el usuario ya ha tomado este libro
+      const libroTomado = user.librosTomados.find(item => item.libroId.toString() === libro._id.toString());
+
+      if (libroTomado) {
+        return res.status(400).json({ message: 'Ya has tomado este libro' });
+      }
+
+      // Reducir la cantidad disponible
       libro.cantidadDisponible -= 1;
-      await libro.save();  
-      res.status(200).json(libro);
+
+      // Asignar el libro al usuario
+      user.librosTomados.push({ libroId: libro._id });
+
+      await libro.save();
+      await user.save();
+
+      res.status(200).json({ libro, user });
     } else {
       res.status(400).json({ message: 'No hay más copias disponibles' });
     }
@@ -129,25 +117,42 @@ router.post('/take/:id', async (req, res) => {
     res.status(500).json({ message: 'Error al tomar el libro', error });
   }
 });
+
+// Ruta para devolver un libro (aumentar cantidad disponible y eliminar de la lista del usuario)
 router.post('/return/:id', async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.body;  // El ID del usuario que devuelve el libro
 
   try {
-    
     const libro = await Libro.findById(id);
+    const user = await User.findById(userId);
 
-   
-    if (libro.cantidadDisponible >= 0) {
-      
-      libro.cantidadDisponible +=1;
-      await libro.save();  
-      res.status(200).json(libro);
-    } else {
-      res.status(400).json({ message: 'Error al devolver el libro' });
+    if (!libro || !user) {
+      return res.status(404).json({ message: 'Usuario o libro no encontrado' });
     }
+
+    // Verificar si el usuario tiene este libro en su lista de libros tomados
+    const libroIndex = user.librosTomados.findIndex(item => item.libroId.toString() === libro._id.toString());
+
+    if (libroIndex === -1) {
+      return res.status(400).json({ message: 'No tienes este libro en alquiler' });
+    }
+
+    // Aumentar la cantidad disponible del libro
+    libro.cantidadDisponible += 1;
+
+    // Eliminar el libro de la lista de libros tomados del usuario
+    user.librosTomados.splice(libroIndex, 1);
+
+    await libro.save();
+    await user.save();
+
+    res.status(200).json({ libro, user });
   } catch (error) {
     res.status(500).json({ message: 'Error al devolver el libro', error });
   }
 });
+
+
 
 module.exports = router;

@@ -25,9 +25,15 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['normal', 'admin'], default: 'normal', required:true },
+  librosTomados: [{  // Libros que el usuario ha tomado
+    libroId: { type: mongoose.Schema.Types.ObjectId, ref: 'Libro' },
+    fechaTomado: { type: Date, default: Date.now }
+  }],
 });
 
 const User = mongoose.model('User', userSchema);
+
+
 app.post('/api/register', async (req, res) => {
   const { email, password, role } = req.body;
   // ojo si  el usuario ya existe dara error 
