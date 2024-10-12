@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Libro = require('../models/Libro'); 
+const User = require('../models/User');
 
 // Ruta para obtener todos los libros
 router.get('/', async (req, res) => {
@@ -78,7 +79,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Ruta para tomar un libro (disminuir cantidad disponible)
 router.post('/take/:id', async (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;  // El ID del usuario que toma el libro
@@ -93,7 +93,6 @@ router.post('/take/:id', async (req, res) => {
 
     // Verificar si hay libros disponibles
     if (libro.cantidadDisponible > 0) {
-      // Verificar si el usuario ya ha tomado este libro
       const libroTomado = user.librosTomados.find(item => item.libroId.toString() === libro._id.toString());
 
       if (libroTomado) {
@@ -102,14 +101,12 @@ router.post('/take/:id', async (req, res) => {
 
       // Reducir la cantidad disponible
       libro.cantidadDisponible -= 1;
-
-      // Asignar el libro al usuario
       user.librosTomados.push({ libroId: libro._id });
 
       await libro.save();
       await user.save();
 
-      res.status(200).json({ libro, user });
+      res.status(200).json(libro);  // Devolver solo el libro actualizado
     } else {
       res.status(400).json({ message: 'No hay más copias disponibles' });
     }
@@ -121,7 +118,7 @@ router.post('/take/:id', async (req, res) => {
 // Ruta para devolver un libro (aumentar cantidad disponible y eliminar de la lista del usuario)
 router.post('/return/:id', async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.body;  // El ID del usuario que devuelve el libro
+  const { userId } = req.body;
 
   try {
     const libro = await Libro.findById(id);
@@ -131,28 +128,23 @@ router.post('/return/:id', async (req, res) => {
       return res.status(404).json({ message: 'Usuario o libro no encontrado' });
     }
 
-    // Verificar si el usuario tiene este libro en su lista de libros tomados
     const libroIndex = user.librosTomados.findIndex(item => item.libroId.toString() === libro._id.toString());
 
     if (libroIndex === -1) {
       return res.status(400).json({ message: 'No tienes este libro en alquiler' });
     }
 
-    // Aumentar la cantidad disponible del libro
     libro.cantidadDisponible += 1;
-
-    // Eliminar el libro de la lista de libros tomados del usuario
     user.librosTomados.splice(libroIndex, 1);
 
     await libro.save();
     await user.save();
 
-    res.status(200).json({ libro, user });
+    res.status(200).json(libro);  // Devolver solo el libro actualizado
   } catch (error) {
     res.status(500).json({ message: 'Error al devolver el libro', error });
   }
 });
-
 
 
 module.exports = router;
