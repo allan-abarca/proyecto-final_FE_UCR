@@ -59,7 +59,15 @@ const Library = () => {
   
     axios.post(`http://localhost:5000/api/libros/take/${id}`, { userId })
       .then(response => {
-
+        // Solo actualiza el libro específico que fue tomado
+        setBooks(books.map(book => book._id === id ? response.data : book));
+      })
+      .catch((error) => {
+        console.error("Error al tomar el libro:", error);
+        alert("No hay más copias disponibles");
+      });
+  };
+  
   const returnLibro = (id) => {
     const userId = "ID_DEL_USUARIO";  // Asegúrate de reemplazar esto con el userId real
   
@@ -67,7 +75,11 @@ const Library = () => {
       .then(response => {
         setBooks(books.map(book => book._id === id ? response.data : book));
       })
-
+      .catch((error) => {
+        console.error("Error al devolver el libro:", error);
+        alert("Error al devolver el libro");
+      });
+  };
 
   return (
     <div>
