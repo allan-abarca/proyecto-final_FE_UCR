@@ -5,104 +5,111 @@ const Library = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // Estado para manejar errores
+  const [error, setError] = useState(null);
 
   // Función para obtener libros con el término de búsqueda
-  const fetchBooks = async () => {
+  const fetchBooks = async (term = "") => {
     setLoading(true);
-    setError(null); // Resetear el error
+    setError(null);
     try {
-      const response = await axios.get('/api/libros', { params: { nombre: searchTerm } });
-      setBooks(response.data); 
+      const params = {};
+      if (term) {
+        params.nombre = term; // Puedes ajustar para buscar por autor o género también
+      }
+
+      const response = await axios.get("http://localhost:5000/api/libros", {
+        params,
+      });
+      setBooks(response.data);
     } catch (err) {
-      setError('Hubo un error al buscar los libros. Intenta nuevamente.');
+      setError("Hubo un error al buscar los libros. Intenta nuevamente.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Ejecutar la búsqueda cuando el componente se monta por primera vez
   useEffect(() => {
-    fetchBooks(); 
+    fetchBooks();
   }, []);
 
-  // Manejar el clic de búsqueda
-  const handleSearchClick = () => {
-    if (searchTerm.trim() !== "") {
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
       fetchBooks();
-    } else {
-      alert("Introduce un término de búsqueda");
     }
+  }, [searchTerm]);
+
+  const handleSearchClick = () => {
+    fetchBooks(searchTerm);
   };
 
-  // Manejar la búsqueda con la tecla "Enter"
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSearchClick();
     }
   };
-  // Tomar un libro (disminuir cantidad)
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    fetchBooks();
+  };
+
   const takeLibro = (id) => {
     axios.post(`http://localhost:5000/api/libros/take/${id}`)
       .then(response => {
-        // Actualizar la lista de libros localmente
-        setBooks(books.map(book =>
-          book._id === id ? response.data : book
-        ));
+        setBooks(books.map(book => book._id === id ? response.data : book));
       })
-      .catch(error => {
-        console.error(error);
-        alert('No hay más copias disponibles');
-      });
+      .catch(() => alert("No hay más copias disponibles"));
   };
 
-  // Devolver un libro (aumentar cantidad)
   const returnLibro = (id) => {
     axios.post(`http://localhost:5000/api/libros/return/${id}`)
       .then(response => {
-        // Actualizar la lista de libros localmente
-        setBooks(books.map(book =>
-          book._id === id ? response.data : book
-        ));
+        setBooks(books.map(book => book._id === id ? response.data : book));
       })
-      .catch(error => {
-        console.error(error);
-        alert('Error al devolver el libro');
-      });
+      .catch(() => alert("Error al devolver el libro"));
   };
 
   return (
     <div>
       <h1>Biblioteca de Libros</h1>
-
-      {/* Campo de búsqueda */}
       <input
         type="text"
-        placeholder="Buscar Libro, Genero o Autor...."
+        placeholder="Buscar por nombre, autor o género..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} 
-        onKeyDown={handleKeyDown} // Agregar búsqueda con "Enter"
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button onClick={handleSearchClick}>Buscar</button>
-
-      {/* Mostrar errores */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {/* Mostrar carga mientras se obtienen los datos */}
+      <button onClick={handleSearchClick} disabled={loading}>
+        {loading ? "Buscando..." : "Buscar"}
+      </button>
+      <button onClick={handleClearSearch}>Mostrar todos</button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {loading ? (
         <p>Cargando libros...</p>
-      ) : (
+      ) : books.length > 0 ? (
         <ul>
           {books.map((libro) => (
             <li key={libro._id}>
               <h3>{libro.nombre}</h3>
-              <img src={libro.imagen} alt={libro.nombre} style={{ width: '150px', height: '200px' }} />
+              <img
+                src={libro.imagen}
+                alt={libro.nombre}
+                style={{ width: "150px", height: "200px" }}
+              />
               <p>Autor: {libro.autor}</p>
               <p>Género: {libro.genero}</p>
               <p>Cantidad Disponible: {libro.cantidadDisponible}</p>
+              {libro.cantidadDisponible > 0 ? (
+                <button onClick={() => takeLibro(libro._id)}>Tomar Libro</button>
+              ) : (
+                <p style={{ color: "red" }}>No disponible</p>
+              )}
+              <button onClick={() => returnLibro(libro._id)}>Devolver Libro</button>
             </li>
           ))}
         </ul>
+      ) : (
+        <p>No se encontraron libros.</p>
       )}
     </div>
   );
