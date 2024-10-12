@@ -1,27 +1,27 @@
+// Routes/librosRoutes.js
 const express = require('express');
 const router = express.Router();
 const Libro = require('../models/Libro'); 
 const User = require('../models/User');
 
-// Ruta para obtener todos los libros
+// Ruta para obtener todos los libros o filtrarlos por nombre, autor, género
 router.get('/', async (req, res) => {
   const { nombre, autor, genero } = req.query;
 
   try {
-    // Crear un objeto de filtro dinámico
     const filtro = {};
     
+    // Agrega los filtros de forma dinámica solo si se proporcionan
     if (nombre) {
-      filtro.nombre = { $regex: nombre, $options: 'i' };  // nombre (case-insensitive)
+      filtro.nombre = { $regex: nombre, $options: 'i' };
     }
     if (autor) {
-      filtro.autor = { $regex: autor, $options: 'i' };  // autor (case-insensitive)
+      filtro.autor = { $regex: autor, $options: 'i' };
     }
     if (genero) {
-      filtro.genero = { $regex: genero, $options: 'i' };  //género (case-insensitive)
+      filtro.genero = { $regex: genero, $options: 'i' };
     }
 
-    // Obtener libros con el filtro aplicado
     const libros = await Libro.find(filtro);
     res.status(200).json(libros);
   } catch (error) {
@@ -51,17 +51,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Ruta para eliminar un libro por su ID
-router.delete('/:id', async (req, res) => {
-  try {
-    const libro = await Libro.findByIdAndDelete(req.params.id);
-    if (!libro) return res.status(404).json({ message: 'Libro no encontrado' });
-    res.status(200).json({ message: 'Libro eliminado' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar el libro', error });
-  }
-});
-
 // Ruta para actualizar un libro por ID
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
@@ -79,20 +68,18 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+
+
+// Ruta para tomar un libro (disminuir cantidad)
+
 router.post('/take/:id', async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.body;  // El ID del usuario que toma el libro
 
   try {
     const libro = await Libro.findById(id);
-    const user = await User.findById(userId);
 
-    if (!libro || !user) {
-      return res.status(404).json({ message: 'Usuario o libro no encontrado' });
-    }
-
-    // Verificar si hay libros disponibles
     if (libro.cantidadDisponible > 0) {
+
       const libroTomado = user.librosTomados.find(item => item.libroId.toString() === libro._id.toString());
 
       if (libroTomado) {
@@ -107,6 +94,11 @@ router.post('/take/:id', async (req, res) => {
       await user.save();
 
       res.status(200).json(libro);  // Devolver solo el libro actualizado
+
+      libro.cantidadDisponible -= 1;
+      await libro.save();
+      res.status(200).json(libro);
+
     } else {
       res.status(400).json({ message: 'No hay más copias disponibles' });
     }
@@ -115,9 +107,10 @@ router.post('/take/:id', async (req, res) => {
   }
 });
 
-// Ruta para devolver un libro (aumentar cantidad disponible y eliminar de la lista del usuario)
+// Ruta para devolver un libro (aumentar cantidad)
 router.post('/return/:id', async (req, res) => {
   const { id } = req.params;
+
   const { userId } = req.body;
 
   try {
@@ -141,10 +134,17 @@ router.post('/return/:id', async (req, res) => {
     await user.save();
 
     res.status(200).json(libro);  // Devolver solo el libro actualizado
+
+
+  try {
+    const libro = await Libro.findById(id);
+
+    libro.cantidadDisponible += 1;
+    await libro.save();
+    res.status(200).json(libro);
+
   } catch (error) {
     res.status(500).json({ message: 'Error al devolver el libro', error });
   }
 });
-
-
 module.exports = router;
