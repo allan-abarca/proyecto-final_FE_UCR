@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');  // Asegúrate de que el modelo User esté en una carpeta llamada models
+const User = require('../models/User');  
 
 // Ruta para registrar usuarios (solo admin)
 router.post('/register', async (req, res) => {
