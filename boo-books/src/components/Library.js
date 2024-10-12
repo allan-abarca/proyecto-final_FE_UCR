@@ -54,20 +54,20 @@ const Library = () => {
   };
 
   const takeLibro = (id) => {
-    axios.post(`http://localhost:5000/api/libros/take/${id}`)
+    // Aquí deberías pasar el userId, que puede ser un estado o provenir del contexto de la aplicación
+    const userId = "ID_DEL_USUARIO";  // Asegúrate de reemplazar esto con el userId real
+  
+    axios.post(`http://localhost:5000/api/libros/take/${id}`, { userId })
       .then(response => {
-        setBooks(books.map(book => book._id === id ? response.data : book));
-      })
-      .catch(() => alert("No hay más copias disponibles"));
-  };
 
   const returnLibro = (id) => {
-    axios.post(`http://localhost:5000/api/libros/return/${id}`)
+    const userId = "ID_DEL_USUARIO";  // Asegúrate de reemplazar esto con el userId real
+  
+    axios.post(`http://localhost:5000/api/libros/return/${id}`, { userId })
       .then(response => {
         setBooks(books.map(book => book._id === id ? response.data : book));
       })
-      .catch(() => alert("Error al devolver el libro"));
-  };
+
 
   return (
     <div>

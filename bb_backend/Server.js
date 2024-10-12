@@ -1,10 +1,11 @@
-// server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); 
 const app = express();
 const PORT = 5000;
 const libroRoutes = require('./Routes/librosRoutes');
+const User = require('./models/User');
 
 // Configurar CORS 
 app.use(cors({
@@ -18,22 +19,6 @@ mongoose.connect('mongodb+srv://djvm1591:GaW7jHT35hjoXfNl@cluster0.rmq6q.mongodb
 
 // Middleware
 app.use(express.json());
-
-// Modelo Usuario
-const userSchema = new mongoose.Schema({
-  nombre:{type: String},
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['normal', 'admin'], default: 'normal', required:true },
-  librosTomados: [{  // Libros que el usuario ha tomado
-    libroId: { type: mongoose.Schema.Types.ObjectId, ref: 'Libro' },
-    fechaTomado: { type: Date, default: Date.now }
-  }],
-});
-
-const User = mongoose.model('User', userSchema);
-
-
 app.post('/api/register', async (req, res) => {
   const { email, password, role } = req.body;
   // ojo si  el usuario ya existe dara error 
@@ -65,14 +50,23 @@ app.post('/api/users', async (req, res) => {
 // Ruta de inicio de sesión
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
 
-  if (!user || user.password !== password) {
-    return res.status(400).send('Credenciales incorrectas');
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Comparar la contraseña en texto plano (no es seguro)
+    if (user.password !== password) {
+      return res.status(400).json({ message: 'Contraseña incorrecta' });
+    }
+
+    // Enviar la respuesta con el rol del usuario
+    res.status(200).json({ role: user.role });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al procesar el login', error });
   }
-
-  // Retorna rol del usuario para gestionar el acceso
-  res.status(200).json({ role: user.role });
 });
 
 // Listar usuarios (solo admin)
