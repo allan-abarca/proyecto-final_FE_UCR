@@ -15,6 +15,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  role: {
+     type: String, enum: ['normal', 'admin'],
+      default: 'normal', required:true },
   librosTomados: [
     {
       libroId: {

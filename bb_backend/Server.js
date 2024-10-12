@@ -19,11 +19,6 @@ mongoose.connect('mongodb+srv://djvm1591:GaW7jHT35hjoXfNl@cluster0.rmq6q.mongodb
 
 // Middleware
 app.use(express.json());
-
-
-
-
-
 app.post('/api/register', async (req, res) => {
   const { email, password, role } = req.body;
   // ojo si  el usuario ya existe dara error 
