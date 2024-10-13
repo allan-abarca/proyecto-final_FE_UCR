@@ -11,7 +11,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #592515; /* Color principal */
-    color: #fff;
+    color: #F9F6FA; /* Color secundario para texto */
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -24,33 +24,41 @@
 .library-search input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #305252; /* Cuarto color */
     border-radius: 5px;
 }
 
 .library-content {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dividimos el contenido en dos columnas */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adaptable a diferentes tamaños de pantalla */
     gap: 20px;
 }
 
 .book-item {
     display: flex;
-    gap: 20px;
-    background-color: #FFFFFF;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre imagen y detalles */
+    background-color: #FFFFFF; /* Fondo blanco */
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center; /* Centra los elementos en el eje horizontal */
 }
 
 .book-item img {
-    width: 100px;
+    width: 130px; /* Ancho fijo para las imágenes */
+    height: 200px; /* Alto fijo para mantener el tamaño uniforme */
     border-radius: 5px;
+    border: 1px solid #ccc; /* Borde alrededor de la imagen */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */
 }
 
 .book-details {
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* Espacio uniforme entre elementos */
+    flex-grow: 1; /* Permite que tome el espacio disponible */
+    margin-top: 10px; /* Espaciado entre la imagen y los detalles */
 }
 
 .book-details h3 {
@@ -64,5 +72,38 @@
 
 .book-details p span {
     font-weight: bold;
+}
+
+.book-details button {
+    background-color: #305252; /* Cuarto color como fondo */
+    color: #F9F6FA; /* Color secundario para el texto */
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Efecto al pasar el mouse */
+    margin-bottom: 10px; /* Espacio entre los botones */
+}
+
+.book-details button:last-child {
+    margin-bottom: 0; /* Eliminar el margen del último botón */
+}
+
+.book-details button:hover {
+    background-color: #488286; /* Cambiar color al pasar el mouse */
+}
+
+.book-details button:disabled {
+    background-color: #ccc; /* Color para el botón deshabilitado */
+    cursor: not-allowed; /* Cambiar cursor para indicar que no se puede hacer clic */
+}
+
+/* Estilos para el estado de disponibilidad */
+.available {
+    color: #488286; /* Color verde para disponible */
+}
+
+.unavailable {
+    color: #FF6347; /* Color rojo para no disponible (rojo tomate) */
 }
 

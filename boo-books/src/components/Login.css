@@ -5,12 +5,13 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    padding: 20px;
     background-color: #F9F6FA; /* Color secundario */
 }
 
 .image-container {
     width: 100%; 
-    max-width: 400px; /* Ancho máximo */
+    max-width: 420px; /* Ancho máximo */
     height: 150px; /* Altura fija para la imagen */
     overflow: hidden; /* Esconde el desbordamiento */
     border-radius: 10px; /* Bordes redondeados */
@@ -34,9 +35,11 @@
     background-color: #FFFFFF;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 350px;
+    padding: 40px; /* Padding adicional para mejor visualización */
+    width: 100%; /* Ancho completo dentro del contenedor */
+    max-width: 350px; /* Ancho máximo */
     text-align: center;
+    margin: 20px 0; /* Margen entre el login box y otros elementos */
 }
 
 .login-box h1 {
@@ -44,45 +47,65 @@
     margin-bottom: 20px;
 }
 
-.login-box label {
+.form-group {
+    width: 100%; /* Asegura que el form-group tome el ancho completo */
+    margin: 0; /* Sin margen */
+    padding: 10px; /* Espaciado interno */
+}
+
+.form-group label {
     display: block;
-    margin: 10px 0 5px 0;
+    margin: 10px 0 5px 0; /* Margen entre etiqueta y textbox */
     color: #305252; /* Cuarto color */
     text-align: left;
 }
 
-.login-box input {
-    width: 100%;
+.form-control {
+    width: 100%; /* Ancho completo dentro del box */
     padding: 10px;
-    margin: 5px 0;
+    margin: 5px 0; /* Espaciado entre los textboxes */
     border: 1px solid #ccc;
     border-radius: 5px;
+    color: #77878B; /* Color terciario */
+    box-sizing: border-box; /* Asegura que padding y border no afecten el ancho total */
 }
 
-.login-box input[type="checkbox"] {
-    width: auto;
-    margin-right: 10px;
-}
-
-.login-box .error-message {
+.error-message {
     color: red;
     font-size: 0.85em;
     text-align: left;
     margin-bottom: 10px;
 }
 
-.login-box button {
+.login-button {
     background-color: #592515; /* Color principal */
     color: #fff;
     padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px; /* Bordes más redondeados */
     cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
+    width: 100%; /* Ancho completo del botón */
+    max-width: 370px; /* Ancho máximo del botón */
+    margin-top: 20px; /* Espaciado arriba del botón */
+    transition: background-color 0.3s; /* Transición suave para el hover */
 }
 
-.login-box button:hover {
+.login-button:hover {
     background-color: #305252; /* Cuarto color */
+}
+
+/* Ajustes adicionales para responsividad */
+@media (max-width: 600px) {
+    .login-box {
+        padding: 30px; /* Menos padding en pantallas pequeñas */
+    }
+
+    .login-button {
+        width: 100%; /* Asegurar que el botón ocupe todo el ancho */
+    }
+
+    .form-control {
+        padding: 8px; /* Menos padding en campos de entrada */
+    }
 }
 

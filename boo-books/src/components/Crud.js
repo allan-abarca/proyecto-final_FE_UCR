@@ -1,21 +1,18 @@
 import React from "react";
-
 import './Crud.css'; 
 import AdminLibros from "./adminLibros";
 import AdminUsers from "./adminUsers";
 
 const Crud = () => {
-    
     return (
         <div className="crud-container">
-            
-            <div classname="AdminBooks">
-            <AdminLibros/>
+            {/* Se corrige el uso de className */}
+            <div className="AdminBooks">
+                <AdminLibros />
             </div>
-            <div classname="AdminUsers">
-            <AdminUsers/>
+            <div className="AdminUsers">
+                <AdminUsers />
             </div>
-            
         </div>
     );
 };

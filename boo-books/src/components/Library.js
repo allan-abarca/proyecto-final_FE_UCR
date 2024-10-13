@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./Library.css"; // Asegúrate de importar tu CSS
 
 const Library = () => {
   const [books, setBooks] = useState([]);
@@ -7,7 +8,7 @@ const Library = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const userId = localStorage.getItem('userId');  // Obtener el userId del localStorage
+  const userId = localStorage.getItem('userId'); // Obtener el userId del localStorage
 
   // Función para obtener libros con el término de búsqueda
   const fetchBooks = async (term = "") => {
@@ -16,7 +17,7 @@ const Library = () => {
     try {
       const params = {};
       if (term) {
-        params.nombre = term; // Puedes ajustar para buscar por autor o género también
+        params.nombre = term; // Buscar por nombre
       }
 
       const response = await axios.get("http://localhost:5000/api/libros", { params });
@@ -56,7 +57,6 @@ const Library = () => {
   const takeLibro = async (libroId) => {
     try {
       const response = await axios.post(`http://localhost:5000/api/libros/take/${libroId}`, { userId });
-      // Actualiza el estado de los libros después de tomar uno
       setBooks(books.map(book => book._id === libroId ? response.data : book));
       alert("Libro tomado exitosamente");
     } catch (error) {
@@ -68,7 +68,6 @@ const Library = () => {
   const returnLibro = async (libroId) => {
     try {
       const response = await axios.post(`http://localhost:5000/api/libros/return/${libroId}`, { userId });
-      // Actualiza el estado de los libros después de devolver uno
       setBooks(books.map(book => book._id === libroId ? response.data : book));
       alert("Libro devuelto exitosamente");
     } catch (error) {
@@ -78,44 +77,54 @@ const Library = () => {
   };
 
   return (
-    <div>
-      <h1>Biblioteca de Libros</h1>
-      <input
-        type="text"
-        placeholder="Buscar por nombre, autor o género..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button onClick={handleSearchClick} disabled={loading}>
-        {loading ? "Buscando..." : "Buscar"}
-      </button>
-      <button onClick={handleClearSearch}>Mostrar todos</button>
+    <div className="library-container">
+      <h1 className="library-header">Biblioteca de Libros</h1>
+      <div className="library-search">
+        <input
+          type="text"
+          placeholder="Buscar por nombre, autor o género..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={handleSearchClick} disabled={loading}>
+          {loading ? "Buscando..." : "Buscar"}
+        </button>
+        <button onClick={handleClearSearch}>Mostrar todos</button>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {loading ? (
         <p>Cargando libros...</p>
       ) : books.length > 0 ? (
-        <ul>
+        <div className="library-content">
           {books.map((libro) => (
-            <li key={libro._id}>
-              <h3>{libro.nombre}</h3>
+            <div className="book-item" key={libro._id}>
               <img
                 src={libro.imagen}
                 alt={libro.nombre}
-                style={{ width: "150px", height: "200px" }}
+                className="book-image"
               />
-              <p>Autor: {libro.autor}</p>
-              <p>Género: {libro.genero}</p>
-              <p>Cantidad Disponible: {libro.cantidadDisponible}</p>
-              {libro.cantidadDisponible > 0 ? (
-                <button onClick={() => takeLibro(libro._id)}>Tomar Libro</button>
-              ) : (
-                <p style={{ color: "red" }}>No disponible</p>
-              )}
-              <button onClick={() => returnLibro(libro._id)}>Devolver Libro</button>
-            </li>
+              <div className="book-details">
+                <h3>{libro.nombre}</h3>
+                <p>Autor: {libro.autor}</p>
+                <p>Género: {libro.genero}</p>
+                <p>
+                  Cantidad Disponible: 
+                  <span style={{ color: libro.cantidadDisponible > 0 ? "green" : "red" }}>
+                    {libro.cantidadDisponible}
+                  </span>
+                </p>
+                <p>ISBN: {libro.isbn}</p> {/* Mostrar el ISBN */}
+                {libro.cantidadDisponible > 0 ? (
+                  <button onClick={() => takeLibro(libro._id)}>Tomar Libro</button>
+                ) : (
+                  <button disabled>No disponible</button>
+                )}
+                <button onClick={() => returnLibro(libro._id)}>Devolver Libro</button>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No se encontraron libros.</p>
       )}
