@@ -1,12 +1,11 @@
-
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-
   email: Yup.string().email("Email inválido").required("Email requerido"),
   password: Yup.string().min(6, "La contraseña debe tener al menos 6 caracteres").required("Contraseña requerida"),
 });
@@ -14,12 +13,18 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const navigate = useNavigate();
 
-  // aqui se manejara el login
+  // Aquí se maneja el login
   const handleLogin = async (values) => {
     try {
       const response = await axios.post("http://localhost:5000/api/login", values);
-      const { role } = response.data;
+      
+      // Supongamos que recibes `userId` y `role` en la respuesta
+      const { _id: userId, role } = response.data;
 
+      // Guardar el userId en localStorage
+      localStorage.setItem('userId', userId);
+
+      // Redirigir según el rol del usuario
       if (role === "admin") {
         navigate("/admin");
       } else {

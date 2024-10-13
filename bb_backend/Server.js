@@ -57,13 +57,13 @@ app.post('/api/login', async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Comparar la contraseña en texto plano (no es seguro)
+    
     if (user.password !== password) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
 
     // Enviar la respuesta con el rol del usuario
-    res.status(200).json({ role: user.role });
+    res.status(200).json({_id: user._id, role: user.role });
   } catch (error) {
     res.status(500).json({ message: 'Error al procesar el login', error });
   }
