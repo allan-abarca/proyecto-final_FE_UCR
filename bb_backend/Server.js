@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); 
 const app = express();
-const PORT = 5000;
+const PORT = 5000;// Puerto en el que correrá el servidor
+// Importar las rutas relacionadas 
 const libroRoutes = require('./Routes/librosRoutes');
 const User = require('./models/User');
 
@@ -17,8 +18,9 @@ mongoose.connect('mongodb+srv://djvm1591:GaW7jHT35hjoXfNl@cluster0.rmq6q.mongodb
 }).then(() => console.log('Conectado a la base de datos'))
   .catch((err) => console.log(err));
 
-// Middleware
+// Middleware para interpretar JSON en las solicitudes
 app.use(express.json());
+// Ruta para registrar un usuario en la base de datos
 app.post('/api/register', async (req, res) => {
   const { email, password, role } = req.body;
   // ojo si  el usuario ya existe dara error 
@@ -50,31 +52,25 @@ app.post('/api/users', async (req, res) => {
 // Ruta de inicio de sesión
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    
+    } 
     if (user.password !== password) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
-
     // Enviar la respuesta con el rol del usuario
     res.status(200).json({_id: user._id, role: user.role });
   } catch (error) {
     res.status(500).json({ message: 'Error al procesar el login', error });
   }
 });
-
 // Listar usuarios (solo admin)
 app.get('/api/users', async (req, res) => {
-  const users = await User.find();
-  res.status(200).json(users);
+  const users = await User.find(); // Obtener todos los usuarios
+  res.status(200).json(users);// Responder con los usuarios
 });
-
 // Editar usuario (solo admin)
 app.put('/api/users/:id', async (req, res) => {
   const { id } = req.params;
@@ -82,7 +78,7 @@ app.put('/api/users/:id', async (req, res) => {
 
   try {
     // Buscar el usuario existente
-    const user = await User.findById(id);
+    const user = await User.findById(id);// Buscar el usuario por ID
     if (!user) return res.status(404).send('Usuario no encontrado');
 
     // Actualizar solo los campos modificados
@@ -92,9 +88,9 @@ app.put('/api/users/:id', async (req, res) => {
     // Solo actualizar la contraseña si se proporciona
     if (password) user.password = password;
 
-    await user.save();  // Guardar los cambios en la ruta del server 
+    await user.save();  // Guardar los cambios 
 
-    res.status(200).json(user);
+    res.status(200).json(user);// Responder con el usuario actualizado
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar el usuario', error });
   }
@@ -103,12 +99,13 @@ app.put('/api/users/:id', async (req, res) => {
 // Eliminar usuario (solo admin)
 app.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
-  const deletedUser = await User.findByIdAndDelete(id);
+  const deletedUser = await User.findByIdAndDelete(id);// Eliminar usuario por ID
   
   if (!deletedUser) return res.status(404).send('Usuario no encontrado');
   
   res.status(200).send('Usuario eliminado');
 });
+// Usar las rutas de libros
 app.use('/api/libros', libroRoutes); 
 
 // Inicializar servidor
