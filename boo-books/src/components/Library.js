@@ -7,6 +7,8 @@ const Library = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const userId = localStorage.getItem('userId');  // Obtener el userId del localStorage
+
   // Función para obtener libros con el término de búsqueda
   const fetchBooks = async (term = "") => {
     setLoading(true);
@@ -17,9 +19,7 @@ const Library = () => {
         params.nombre = term; // Puedes ajustar para buscar por autor o género también
       }
 
-      const response = await axios.get("http://localhost:5000/api/libros", {
-        params,
-      });
+      const response = await axios.get("http://localhost:5000/api/libros", { params });
       setBooks(response.data);
     } catch (err) {
       setError("Hubo un error al buscar los libros. Intenta nuevamente.");
@@ -53,32 +53,28 @@ const Library = () => {
     fetchBooks();
   };
 
-  const takeLibro = (id) => {
-    // Aquí deberías pasar el userId, que puede ser un estado o provenir del contexto de la aplicación
-    const userId = "ID_DEL_USUARIO";  // Asegúrate de reemplazar esto con el userId real
-  
-    axios.post(`http://localhost:5000/api/libros/take/${id}`, { userId })
-      .then(response => {
-        // Solo actualiza el libro específico que fue tomado
-        setBooks(books.map(book => book._id === id ? response.data : book));
-      })
-      .catch((error) => {
-        console.error("Error al tomar el libro:", error);
-        alert("No hay más copias disponibles");
-      });
+  const takeLibro = async (libroId) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/api/libros/take/${libroId}`, { userId });
+      // Actualiza el estado de los libros después de tomar uno
+      setBooks(books.map(book => book._id === libroId ? response.data : book));
+      alert("Libro tomado exitosamente");
+    } catch (error) {
+      console.error("Error al tomar el libro:", error.response ? error.response.data : error.message);
+      alert(error.response ? error.response.data.message : "Error al tomar el libro");
+    }
   };
-  
-  const returnLibro = (id) => {
-    const userId = "ID_DEL_USUARIO";  // Asegúrate de reemplazar esto con el userId real
-  
-    axios.post(`http://localhost:5000/api/libros/return/${id}`, { userId })
-      .then(response => {
-        setBooks(books.map(book => book._id === id ? response.data : book));
-      })
-      .catch((error) => {
-        console.error("Error al devolver el libro:", error);
-        alert("Error al devolver el libro");
-      });
+
+  const returnLibro = async (libroId) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/api/libros/return/${libroId}`, { userId });
+      // Actualiza el estado de los libros después de devolver uno
+      setBooks(books.map(book => book._id === libroId ? response.data : book));
+      alert("Libro devuelto exitosamente");
+    } catch (error) {
+      console.error("Error al devolver el libro:", error.response ? error.response.data : error.message);
+      alert(error.response ? error.response.data.message : "Error al devolver el libro");
+    }
   };
 
   return (
