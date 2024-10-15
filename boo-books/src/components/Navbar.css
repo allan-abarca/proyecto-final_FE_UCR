@@ -1,4 +1,3 @@
-/* Estilos para la barra de navegación en UserDashboard y AdminDashboard */
 .navbar {
     background-color: #592515; 
     padding: 10px 20px;
@@ -20,28 +19,29 @@
     padding: 0; 
     flex: 1; 
     justify-content: center; 
+    align-items: center; 
 }
 
 .navbar ul li {
-    display: inline;
+    margin: 0 10px; 
+    display: flex; 
+    align-items: center; 
 }
 
-.navbar ul li a {
+.navbar ul li a, 
+.logout-button { /* Aplica los mismos estilos tanto a los enlaces como al botón de logout */
     color: #F9F6FA; 
     text-decoration: none; 
     padding: 8px 15px; 
     border-radius: 5px;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
+    background-color: transparent;
+    border: none; 
+    cursor: pointer;
+    display: block; /* Asegura que los enlaces y el botón ocupen el mismo espacio */
 }
 
-.navbar ul li {
-    margin: 0 10px; /* Espacio horizontal entre los elementos */
-}
-
-.logout-button {
-    margin-left: 20px; /* Margen a la izquierda del botón de cerrar sesión */
-}
-
-.navbar ul li a:hover {
+.navbar ul li a:hover, 
+.logout-button:hover {
     background-color: #305252; /* Color al pasar el ratón */
 }

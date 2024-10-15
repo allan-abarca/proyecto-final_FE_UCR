@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './App.css'; // Para agregar algunos estilos personalizados
+import './App.css'; 
 
 const App = () => {
   const [libros, setLibros] = useState([]);
