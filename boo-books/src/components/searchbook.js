@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Library from './Library';  // Importa el componente que usas para mostrar los libros
+import Library from './Library';  // Importa el componente que usa para mostrar los libros
 
 const SearchBooks = () => { 
   const [searchTerm, setSearchTerm] = useState({ nombre: '', autor: '', genero: '' });
