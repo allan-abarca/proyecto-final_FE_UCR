@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from './Login.css'; 
+import './Login.css'; // Importación CSS normal
 import loginImage from '../images/boo-books.jpg'; 
 
 // Esquema de validación con Yup
@@ -36,11 +36,11 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.imageContainer}>
-        <img src={loginImage} alt="Login" className={styles.loginImage} />
+    <div className="loginContainer"> {/* Usar className para aplicar las clases CSS */}
+      <div className="imageContainer">
+        <img src={loginImage} alt="Login" className="loginImage" />
       </div>
-      <div className={styles.loginBox}>
+      <div className="loginBox">
         <h1>Login</h1>
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -48,17 +48,17 @@ const Login = () => {
           onSubmit={handleLogin}
         >
           <Form>
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Email:</label>
-              <Field type="email" name="email" className={styles.formControl} />
-              <ErrorMessage name="email" component="div" className={styles.errorMessage} />
+              <Field type="email" name="email" className="formControl" />
+              <ErrorMessage name="email" component="div" className="errorMessage" />
             </div>
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Contraseña:</label>
-              <Field type="password" name="password" className={styles.formControl} />
-              <ErrorMessage name="password" component="div" className={styles.errorMessage} />
+              <Field type="password" name="password" className="formControl" />
+              <ErrorMessage name="password" component="div" className="errorMessage" />
             </div>
-            <button type="submit" className={styles.loginButton}>Login</button>
+            <button type="submit" className="loginButton">Login</button>
           </Form>
         </Formik>
       </div>
