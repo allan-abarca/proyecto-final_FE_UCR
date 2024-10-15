@@ -1,25 +1,14 @@
-/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     background-color: #F9F6FA; /* Color secundario */
 }
 
-/* Estilos específicos para el CRUD */
-.crud-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para títulos en el CRUD */
-.crud-container h1 {
+h1 {
     color: #592515; /* Color principal */
     font-size: 1.8em; /* Aumenta el tamaño del encabezado */
 }
 
-/* Botones en el CRUD */
-.crud-container button {
+button {
     background-color: #305252; /* Cuarto color */
     color: #F9F6FA; /* Color secundario */
     border: none;
@@ -32,12 +21,11 @@ body {
     font-size: 0.9em; /* Tamaño de fuente un poco más pequeño */
 }
 
-.crud-container button:hover {
+button:hover {
     background-color: #488286; /* Quinto color */
 }
 
-/* Inputs en el CRUD */
-.crud-container input {
+input {
     display: block;
     margin: 10px 0;
     padding: 10px; /* Aumenta el padding de los inputs */
@@ -48,8 +36,7 @@ body {
     font-size: 1em; /* Aumenta el tamaño de fuente */
 }
 
-/* Estilos para la lista de libros dentro del CRUD */
-.crud-container .bookList {
+.bookList {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,31 +46,28 @@ body {
     margin-bottom: 5px; /* Espaciado inferior reducido */
 }
 
-/* Contenedor de botones en la lista de libros */
-.crud-container .buttons {
+.buttons {
     display: flex;
     gap: 8px; /* Espaciado entre botones */
     margin-left: 10px; /* Ajusta según sea necesario */
 }
 
-/* Estilos responsivos */
 @media (max-width: 600px) {
-    .crud-container h1 {
+    h1 {
         font-size: 1.5em; /* Ajusta el tamaño en pantallas pequeñas */
     }
 
-    .crud-container button {
+    button {
         font-size: 0.8em; /* Tamaño más pequeño en pantallas pequeñas */
         padding: 6px 10px; /* Ajusta el padding en pantallas pequeñas */
     }
 
-    .crud-container input {
+    input {
         font-size: 0.9em; /* Tamaño más pequeño en pantallas pequeñas */
         padding: 8px; /* Ajusta el padding en pantallas pequeñas */
     }
 
-    .crud-container .bookList {
+    .bookList {
         font-size: 0.9em; /* Tamaño más pequeño en pantallas pequeñas */
     }
 }
-
