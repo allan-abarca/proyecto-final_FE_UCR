@@ -1,5 +1,7 @@
+/* Login.module.css */
+
 /* Estilos para la pantalla de Login */
-.login-container {
+.loginContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,10 +11,10 @@
     background-color: #F9F6FA; /* Color secundario */
 }
 
-.image-container {
+.imageContainer {
     width: 100%; 
     max-width: 420px; /* Ancho máximo */
-    height: 150px; /* Altura fija para la imagen */
+    height: 170px; /* Altura fija para la imagen */
     overflow: hidden; /* Esconde el desbordamiento */
     border-radius: 10px; /* Bordes redondeados */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
@@ -21,46 +23,46 @@
     justify-content: center; /* Centrar horizontalmente */
 }
 
-.login-image {
+.loginImage {
     width: auto; /* Mantener proporción */
     height: 100%; /* Llenar el contenedor */
     transition: transform 0.3s; /* Transición suave al hacer hover */
 }
 
-.image-container:hover .login-image {
+.imageContainer:hover .loginImage {
     transform: scale(1.05); /* Aumentar ligeramente el tamaño al pasar el ratón */
 }
 
-.login-box {
+.loginBox {
     background-color: #FFFFFF;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 40px; /* Padding adicional para mejor visualización */
     width: 100%; /* Ancho completo dentro del contenedor */
-    max-width: 350px; /* Ancho máximo */
+    max-width: 330px; /* Ancho máximo */
     text-align: center;
     margin: 20px 0; /* Margen entre el login box y otros elementos */
 }
 
-.login-box h1 {
+.loginBox h1 {
     color: #592515; /* Color principal */
     margin-bottom: 20px;
 }
 
-.form-group {
+.formGroup {
     width: 100%; /* Asegura que el form-group tome el ancho completo */
     margin: 0; /* Sin margen */
     padding: 10px; /* Espaciado interno */
 }
 
-.form-group label {
+.formGroup label {
     display: block;
     margin: 10px 0 5px 0; /* Margen entre etiqueta y textbox */
     color: #305252; /* Cuarto color */
     text-align: left;
 }
 
-.form-control {
+.formControl {
     width: 100%; /* Ancho completo dentro del box */
     padding: 10px;
     margin: 5px 0; /* Espaciado entre los textboxes */
@@ -70,14 +72,14 @@
     box-sizing: border-box; /* Asegura que padding y border no afecten el ancho total */
 }
 
-.error-message {
+.errorMessage {
     color: red;
     font-size: 0.85em;
     text-align: left;
     margin-bottom: 10px;
 }
 
-.login-button {
+.loginButton {
     background-color: #592515; /* Color principal */
     color: #fff;
     padding: 10px;
@@ -90,22 +92,23 @@
     transition: background-color 0.3s; /* Transición suave para el hover */
 }
 
-.login-button:hover {
+.loginButton:hover {
     background-color: #305252; /* Cuarto color */
 }
 
 /* Ajustes adicionales para responsividad */
 @media (max-width: 600px) {
-    .login-box {
+    .loginBox {
         padding: 30px; /* Menos padding en pantallas pequeñas */
     }
 
-    .login-button {
+    .loginButton {
         width: 100%; /* Asegurar que el botón ocupe todo el ancho */
     }
 
-    .form-control {
+    .formControl {
         padding: 8px; /* Menos padding en campos de entrada */
     }
 }
+
 
